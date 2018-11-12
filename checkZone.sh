@@ -3,19 +3,10 @@
   #                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
 #endcode end
 #complie=true
-#Author: Mr.
-#Date:2015-01-29
-#Description:琅琊榜开区（不包含mysql安装）
-#Usage:
+
 source /etc/profile
 
-############################################################# 功能函数 Begin ##################################################################
 
-        #显示消息
-        #showType='errSysMsg/errSys/errUserMsg/warning/msg/msg2/OK'
-        #错误输出（以红色字体输出） errSysMsg：捕捉系统错误后发现相信并退出；errSys：捕捉到系统错误后退出；errUserMsg：自定义错误并退出，但不退出（errSysMsg及errUserMsg可以赋第三个参数isExit为非1来控制不退出）
-        #警告（以黄色字体输出）  warning：显示warning，但不退出
-        #显示信息（以白色字体输出，OK以绿色输出） msg：输出信息并换行；msg2：输出信息不换行；OK：输出绿色OK并换行
         function showMsg()
         {
                 errState="$?"
@@ -79,7 +70,6 @@ source /etc/profile
         }
 
         #执行sql语句
-        # echo "select now()" | executeSql root 7roaddba
         function executeSql()
         {
                 sql="$1"
@@ -171,8 +161,6 @@ prompt()
 }
 
 		
-
-############################################################# 功能函数 End ####################################################################
 #获取解密var
 get_Vault()
 {
@@ -194,15 +182,12 @@ get_Vault()
 }
 
 
-
-
 #初始化变量
 function init()
 {
         sid=`basename $0`
         export pid="${pid}-->$sid"
         theFiledir=`echo $(cd "$(dirname "$0")"; pwd)`
-		#echo $theFiledir
         cd ${theFiledir}
 		logFile='/data/shelllog/scsgwsOpen.log'
 
@@ -211,15 +196,8 @@ function init()
 
 function main()
 {    
-	#centerServiceIp 中控后台数据库从库ip
+
 	centerServiceIp=183.61.x.x
-#	planid=$1
-#	TYPEFLAG=$2
-#    if [ -z "$1" ]; then
-#		showMsg "errusermsg" "para is empty,please check it."
-#    fi
-	
-	#清空log
 	:>/var/log/ansible.log
 	init
 	
@@ -242,23 +220,8 @@ function main()
 	checkFileExist "/tmp/.vault.pass"
 	checkFileExist "$theFiledir/centerSrvIp.cnf"
 	checkFileExist "${theFiledir}/getVariList.yml"
-    
-#	if [ "$TYPEFLAG" == "DB" ];then
-#
-        ansible-playbook -i centerSrvIp.cnf getVariList.yml -k --vault-password-file=/tmp/.vault.pass
-
-#		ansible-playbook -i centerSrvIp.cnf getVariList.yml -e "days=$planid type=mergedb" -k  --vault-password-file=/tmp/.vault.pass
-#	elif [ "$TYPEFLAG" == "LOG" ];then
-#		ansible-playbook -i centerSrvIp.cnf getVariList.yml -e "days=$planid type=mergelog" -k  --vault-password-file=/tmp/.vault.pass
-#	else
-#		showMsg "errusermsg" "para is error,please check it."
-#	fi
-#	if [ -f openarea/$centerServiceIp/tmp/oneMergeScriptList ];then
-#		mv openarea/$centerServiceIp/tmp/oneMergeScriptList  openarea/oneMergeScriptList
-#	else
-#		showMsg "errusermsg" "oneMergeScriptList file is not exist,please check it."
-#	fi
-#	checkFileExist "openarea/oneMergeScriptList"
+   
+    ansible-playbook -i centerSrvIp.cnf getVariList.yml -k --vault-password-file=/tmp/.vault.pass
 	checkFileExist "openarea/$centerServiceIp/tmp/waitProc_list.txt"
 	nullnum=`cat openarea/$centerServiceIp/tmp/waitProc_list.txt|grep -c -w 'null'`
 	if [ $nullnum -ge 1 ] ;then 
@@ -271,7 +234,7 @@ function main()
 	echo "......"
 	echo ''
 	echo "Execution script DB slave-server list:"
-#	echo "mergeArea the game area totals: ${#array_area_cnt[*]}"
+
 	cat openarea/$centerServiceIp/tmp/waitProc_list.txt
 	prompt "========== Are you sure check this servers ?"
 
@@ -294,13 +257,8 @@ function main()
            
         rsync -rvltD checkallname/ 10.61.101.173::tongbu_s/checkallname/  
 
-#	if [ -f openarea/oneMergeScriptList ];then
-#		rm -fr openarea/oneMergeScriptList
-#	fi
-
 	cat /var/log/ansible.log |sed '/failed:/,+1p'> exec.error
 
-#	rm -fr openarea/$centerServiceIp/tmp/*
 	rm -rf openarea
         rm -rf checkallname
 	:>/var/log/ansible.log

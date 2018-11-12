@@ -1,28 +1,10 @@
 #!/bin/sh
-#encode begin
-  #                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+#encode begin                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
 #endcode end
-#complie=true
-#Author: Eric.chen
-#Date:2012-08-13
-#Description:神曲开区脚（不包含mysql安装）
-#Usage:
+
 source /etc/profile
 
-#取模板
-#解压模板
-#导入模板
-#授权
-#生成站点配置信息
-#修改主数据
-#配置时间同步
-############################################################# 功能函数 Begin ##################################################################
 
-        #显示消息
-        #showType='errSysMsg/errSys/errUserMsg/warning/msg/msg2/OK'
-        #错误输出（以红色字体输出） errSysMsg：捕捉系统错误后发现相信并退出；errSys：捕捉到系统错误后退出；errUserMsg：自定义错误并退出，但不退出（errSysMsg及errUserMsg可以赋第三个参数isExit为非1来控制不退出）
-        #警告（以黄色字体输出）  warning：显示warning，但不退出
-        #显示信息（以白色字体输出，OK以绿色输出） msg：输出信息并换行；msg2：输出信息不换行；OK：输出绿色OK并换行
         function showMsg()
         {
                 errState="$?"
@@ -87,10 +69,9 @@ source /etc/profile
 
 		
 		
+	
 		
-		###############################################END#######################################################################
-		
-		function init()
+function init()
 {
         sid=`basename $0`
         export pid="${pid}-->$sid"
@@ -232,49 +213,12 @@ function main()
 	{
 	center_mysqlUser=$1
 	center_mysqlPwd=$2
-#	PlanId=$3
 	rm -f waitProc_list.txt
-#	type=$4
-#	init
 	if [ ! -f oneMergeScriptList ];then
 		touch oneMergeScriptList
 	fi
-#	if [ "$type" == "open" ] ;then
-#		status=3
-	#	echo '[copyfile]' >waitProc_list.txt
-
-#		getSysInitList_sys
-
-#		echo '[open]' >>waitProc_list.txt
 		getVariList
-
 		showMsg "errsysmsg" "getVariList_openarea error!!"
-#		getDbStructure	
-#		showMsg "errsysmsg" "getDbStructure error!!"
-#	elif [ "$type" == "clear" ] ; then 
-#		status=2
-#		echo '[copyfile]' >waitProc_list.txt
-#		getSysInitList_sys
-#		echo '[clear]' >>waitProc_list.txt
-#		getVariList
-#		showMsg "errsysmsg" "getVariList_scclean error!!"
-#		
-#	elif [ "$type" == "dbrename" ] ; then 
-#		echo '[copyfile]' >waitProc_list.txt
-#		getRenameList_sys
-#		showMsg "errsysmsg" "getRenameList_sys error!!"
-#		echo '[dbrename]' >>waitProc_list.txt
-#		getRenameList
-#		showMsg "errsysmsg" "getRenameList error!!"
-#####	elif [ "$type" == "mergedb" ];then
-####		getVariList_m
-##		showMsg "errsysmsg" "getVariList_merge is error"
-##	elif [ "$type" == "mergelog" ];then
-#		getVariList_m
-#		showMsg "errsysmsg" "getVariList_merge is error"
-#	else
-##		showMsg "errusermsg" "$type is  error!!"
-#	fi
 	}
 	
 main $*
