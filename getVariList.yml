@@ -1,0 +1,23 @@
+---
+- name: getVariList 
+  hosts: all
+  vars_files:
+    - vars/openarea_vars.yml
+  tasks:
+    - name: copy getVariList.sh to /tmp/ 
+      copy: src=getVariList.sh dest=/tmp/getVariList.sh mode=0700
+    - name: exec getVariList.sh 
+      shell: ./getVariList.sh  {{ center_mysqlUser }} {{ center_mysqlPwd }}  
+      args:
+        chdir: /tmp
+    - name: pull waitProc_list.txt  getVariList.sh
+      fetch: src=/tmp/{{ item }} dest=openarea fail_on_missing=yes
+      with_items:
+         - waitProc_list.txt
+         - oneMergeScriptList
+    - name: rm waitProc_list.txt
+      shell: rm -fr /tmp/{{ item }}
+      with_items: 
+        - waitProc_list.txt
+        - oneMergeScriptList
+        - getVariList.sh

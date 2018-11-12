@@ -1,0 +1,35 @@
+---
+
+ - name: start checkname
+   hosts: all
+   vars_files:
+      - vars/openarea_vars.yml
+   tasks:   
+    - name: mkdir checkname
+      file: path=/data/checkname state=directory mode=0755
+    - name: copy checkmg.sh to /data/checkname
+      copy: src=mingan/{{ item }} dest=/data/checkname/{{ item }} mode=0700
+      with_items:
+         - checkmg.sh
+
+    - name: copy minganci.csv to /data/checkname
+      copy: src=mingan/{{ item }} dest=/data/checkname/{{ item }} mode=0644
+      with_items:
+         - minganci.csv
+
+    - name: exec checkmg.sh <<db_sgws>>
+      shell: sh checkmg.sh "{{ mysqlPwd }}"
+      args:
+         chdir: /data/checkname
+    
+    - name: pull result.txt
+      fetch: src=/data/checkname/{{ item }} dest=openarea fail_on_missing=yes
+      with_items:
+         - result.txt
+    
+    - name: rm -rf /data/checkname
+      shell: rm -rf /data/checkname
+ #     with_items:
+ #        - checkmg.sh
+ #        - minganci.csv
+         
